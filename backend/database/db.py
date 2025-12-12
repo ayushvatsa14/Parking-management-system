@@ -8,7 +8,7 @@ load_dotenv()
 username=os.getenv("DATABASE_USER")
 password=os.getenv("DATABASE_PASSWORD")
 
-DATABASE_URL = f'mysql+pymysql://{username}:{password}@localhost:3306/parking_db'
+DATABASE_URL=f"mysql+pymysql://{username}:{password}@127.0.0.1:3306/parking_management_system_db"
 
 sqlEngine=create_engine(
     DATABASE_URL
@@ -19,7 +19,7 @@ LocalSession=sessionmaker(autocommit=False, autoflush=False, bind=sqlEngine)
 Base=declarative_base()
 
 def dbConnect():
-    db=LocalSession
+    db=LocalSession()
 
     try:
         yield db
