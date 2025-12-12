@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, Path
 from sqlalchemy.orm import Session
 from database.db import dbConnect
 from datetime import datetime
-from schemas.parkingSpacesSchema import UpdateParkingSpace, ApiResponse
+from schemas.parkingSpacesSchema import ParkingSpaceResponse, UpdateParkingSpace, ApiResponse
 from models.parkingSpacesModel import ParkingSpaces
 
 router=APIRouter()
 
-@router.get("/", response_model=ApiResponse)
+@router.get("/", response_model=ApiResponse[list[ParkingSpaceResponse]])
 def parkingSpacesAll(db: Session=Depends(dbConnect)):
     spacesAll=db.query(ParkingSpaces).all()
 
@@ -24,7 +24,7 @@ def parkingSpacesAll(db: Session=Depends(dbConnect)):
         data=spacesAll
     )
 
-@router.get("/empty", response_model=ApiResponse)
+@router.get("/empty", response_model=ApiResponse[list[ParkingSpaceResponse]])
 def emptySpaceAll(db: Session=Depends(dbConnect)):
     emptySpaces=db.query(ParkingSpaces).filter(
         ParkingSpaces.availability=="empty"
@@ -36,7 +36,7 @@ def emptySpaceAll(db: Session=Depends(dbConnect)):
         data=emptySpaces
     )
 
-@router.get("/empty/{level}", response_model=ApiResponse)
+@router.get("/empty/{level}", response_model=ApiResponse[list[ParkingSpaceResponse]])
 def emptySpaceByLevel(level: int=Path(..., ge=1, le=3),
                       db: Session=Depends(dbConnect)):
     spacesByLevel=db.query(ParkingSpaces).filter(
@@ -50,7 +50,7 @@ def emptySpaceByLevel(level: int=Path(..., ge=1, le=3),
         data=spacesByLevel
     )
 
-@router.patch("/update", response_model=ApiResponse)
+@router.patch("/update", response_model=ApiResponse[ParkingSpaceResponse])
 def updateParkingSpace(updated_space: UpdateParkingSpace,
                        db: Session=Depends(dbConnect)):
     spaceId=f'L{updated_space.level}-S{updated_space.spot}'
@@ -78,7 +78,7 @@ def updateParkingSpace(updated_space: UpdateParkingSpace,
         data=space
     )
 
-@router.get("/full-capacity", response_model=ApiResponse)
+@router.get("/full-capacity", response_model=ApiResponse[bool])
 def isFullCapacity(db: Session=Depends(dbConnect)):
     emptySpaceCount=db.query(ParkingSpaces).filter(
         ParkingSpaces.availability=="empty"
