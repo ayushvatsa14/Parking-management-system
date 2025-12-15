@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 import os
 from routers.parkingRouter import router
+from routers.login import authRouter
 from database.db import Base, sqlEngine
 
 app=FastAPI()
@@ -18,3 +19,4 @@ def root():
     return {"message": "Welcome to Parking Management System"}
 
 app.include_router(router, prefix='/parking-spaces', tags=["Parking"])
+app.include_router(authRouter, prefix='/login', tags=["Auth"])
