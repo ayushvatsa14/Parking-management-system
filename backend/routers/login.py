@@ -35,10 +35,17 @@ def loginUser(
         max_age=60 * 60 * 24 * 7
     )
 
+    userData={
+        "id": user.id,
+        "name": user.name,
+        "email": user.email
+    }
+
     return {
         "success": True,
         "message": "Login successful",
         "data": {
-            token
+            "token": token,
+            "user": userData
         }
     }
