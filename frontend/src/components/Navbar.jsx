@@ -1,15 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../features/auth/authSlice";
+import { logoutApi } from "../utils/logoutApi";
 
 export const Navbar=() => {
     const userInfo=useSelector(state => state.auth)
-    const dispacth=useDispatch()
+    const dispatch=useDispatch()
     const navigate=useNavigate()
 
-    const handleLogout=() => {
-        dispacth(logout())
-        navigate("/login")
+    const handleLogout=async () => {
+        try {
+            await logoutApi();
+        } 
+        finally {
+            dispatch(logout());
+            navigate("/login");
+        }
     }
 
     return (

@@ -64,7 +64,7 @@ def emptySpaceByLevel(
 def updateParkingSpace(
     updated_space: UpdateParkingSpace,
     db: Session=Depends(dbConnect),
-    current_user=Depends(currentUser),
+    current_user=Depends(currentUser)
 ):
     spaceId=f'L{updated_space.level}-S{updated_space.spot}'
 
