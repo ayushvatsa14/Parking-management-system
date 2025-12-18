@@ -32,7 +32,8 @@ def loginUser(
         httponly=True,
         secure=False,
         samesite="lax",
-        max_age=60 * 60 * 24 * 7
+        max_age=60 * 60 * 24 * 7,
+        path="/"
     )
 
     userData={
@@ -65,10 +66,7 @@ def authMe(user=Depends(currentUser)):
 def logoutUser(response: Response):
     response.delete_cookie(
         key="token",
-        path="/",
-        httponly=True,
-        samesite="none",
-        secure=True
+        path="/"
     )
 
     return {

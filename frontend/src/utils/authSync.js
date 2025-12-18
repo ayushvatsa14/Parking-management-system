@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BASEURL="http://127.0.0.1:9000"
+const BASEURL="http://localhost:9000"
 
 export const authSync=async () => {
     const syncUrl=BASEURL + "/auth/me"

@@ -42,6 +42,8 @@ export const Login=() => {
                 onChange={(e) => {
                     setEmail(e.target.value)
                 }}
+
+                required
             />
 
             <label>Password</label>
@@ -52,6 +54,8 @@ export const Login=() => {
                 onChange={(e) => {
                     setPassword(e.target.value)
                 }}
+
+                required
             />
 
             {loading ? <Loading /> : <button>Login</button>}

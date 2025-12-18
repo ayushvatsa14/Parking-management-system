@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState={
-    spaces: []
+    spaces: [],
+    fetched: false
 }
 
 const parkingSlice=createSlice({
@@ -9,12 +10,13 @@ const parkingSlice=createSlice({
     initialState,
     reducers: {
         setSpaces: (state, action) => {
-            state.spaces=action.payload.spaces
+            state.spaces=action.payload
+            state.fetched=true
         },
 
         updateSpaces: (state, action) => {
             const position=state.spaces.findIndex((space) => {
-                space.id===action.payload.id
+                return space.id===action.payload.id
             })
 
             if(position !== -1){
