@@ -4,11 +4,10 @@ import { fetchParkingSpaces } from "../utils/fetchParkingSpaces"
 import { setSpaces } from "../features/parking/parkingSlice"
 import { ParkingSpaceCard } from "../components/ParkingSpaceCard"
 
-export const LevelSpace=() => {
+export const EmptySpaces=() => {
     const dispatch=useDispatch()
     const {spaces, fetched}=useSelector(state => state.parking)
     const [currentLevel, setCurrentLevel]=useState(0)
-    const free=useSelector(state => state.parking.freeSpaceCount)
 
     useEffect(() => {
         const loadSpaces=async () => {
@@ -24,13 +23,10 @@ export const LevelSpace=() => {
                 }
                 else{
                     let count=0
-                    console.log(free)
 
                     response.data.data.forEach((space) => {
                         count += space.availability==="empty" ? 1 : 0
                     })
-
-                    console.log(count)
 
                     dispatch(setSpaces({
                         spaces: response.data.data,
@@ -51,7 +47,10 @@ export const LevelSpace=() => {
     return (
         <div className="min-h-[80vh] px-6 pb-8">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:gap-4">
-                <label htmlFor="level" className="text-pure-greys-200 font-medium mb-2 sm:mb-0">
+                <label
+                htmlFor="level"
+                className="text-pure-greys-200 font-medium mb-2 sm:mb-0"
+                >
                 Select a level:
                 </label>
                 <select
@@ -66,14 +65,20 @@ export const LevelSpace=() => {
                 <option value="3">Level 3</option>
                 </select>
             </div>
-
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {currentLevel===0 &&
+                spaces
+                    .filter((space) => space.availability==="empty")
+                    .map((space) => <ParkingSpaceCard key={space.id} space={space} />)}
+
                 {currentLevel !== 0 &&
                 spaces
-                    .filter((space) => space.level === currentLevel)
-                    .map((space) => (
-                    <ParkingSpaceCard key={space.id} space={space} />
-                    ))}
+                    .filter(
+                    (space) =>
+                        space.level === currentLevel && space.availability==="empty"
+                    )
+                    .map((space) => <ParkingSpaceCard key={space.id} space={space} />)}
             </div>
         </div>
     )

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState={
     spaces: [],
+    freeSpaceCount: 0,
     fetched: false
 }
 
@@ -10,8 +11,9 @@ const parkingSlice=createSlice({
     initialState,
     reducers: {
         setSpaces: (state, action) => {
-            state.spaces=action.payload
-            state.fetched=true
+            state.spaces=action.payload.spaces
+            state.fetched=action.payload.fetched
+            state.freeSpaceCount=action.payload.count
         },
 
         updateSpaces: (state, action) => {
@@ -20,8 +22,11 @@ const parkingSlice=createSlice({
             })
 
             if(position !== -1){
-                state.spaces[position]=action.payload.space
+                state.spaces[position].availability=action.payload.availability
             }
+
+            const value=action.payload.availability==="empty" ? 1 : -1
+            state.freeSpaceCount += value
         }
     }
 })
